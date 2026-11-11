@@ -15,6 +15,11 @@
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 
+% Real spaces and Unicode text in the PDF, so copy-paste and search work.
+\input{glyphtounicode}
+\pdfgentounicode=1
+\pdfinterwordspaceon
+
 \graphicspath{{../figures/}}
 
 % ── Colours ──────────────────────────────────────────────────────────────────
@@ -356,112 +361,159 @@
       \footnotesize
       \textbf{21 automatic checks}, each recomputed independently:
       \begin{itemize}\setlength{\itemsep}{2pt}
-        \item one row per contestant and edition; scores within range
+        \item one row per contestant and edition; scores in range
         \item \textbf{no future event} in any feature
-        \item country features and targets equal to a direct recomputation
-        \item every column documented
+        \item features and targets match a direct recomputation;
+              every column documented
       \end{itemize}
 
       \vspace{6pt}
-      \begin{block}{Fixed during the data audit}
-        \footnotesize
-        \begin{itemize}\setlength{\itemsep}{1pt}
-          \item 600 split and 8 over-merged profiles
-          \item country modal award computed on 1 year instead of 3
-          \item unstable trend from events weeks apart
+      \begin{block}{Errors found and fixed}
+        \scriptsize
+        \begin{itemize}\setlength{\itemsep}{2pt}
+          \item \textbf{Identity}: 600 profiles of the same person merged,
+                8 profiles mixing two people split
+          \item \textbf{Country feature} used 1 year instead of 3
+          \item \textbf{Trend feature} was extreme for events weeks apart;
+                now computed per year
         \end{itemize}
       \end{block}
   \end{columns}
 \end{frame}
 
-% ── SLIDE 8: Baselines ────────────────────────────────────────────────────────
-\begin{frame}{Baseline Models}
-  \footnotesize
-  \textbf{Temporal split}: train on IMO 2008--2022 (8,646), test on IMO 2023--2026 (2,523);
-  95\% bootstrap intervals over test contestants. Regressions use the 20 compact features.
-
-  \vspace{6pt}
+% ── SLIDE 8: Baselines - setup ─────────────────────────────────────────────────
+\begin{frame}{Baseline Models: Setup}
   \begin{columns}[T]
-    \column{0.43\textwidth}
-      \centering
-      \textbf{Score (0--42)}
-
-      \vspace{3pt}
-      \setlength{\tabcolsep}{4pt}
-      \begin{tabular}{lcc}
-        \toprule
-        \textbf{Model} & \textbf{MAE} & \textbf{$R^2$} \\
-        \midrule
-        Training mean            & 8.37 & $-0.04$ \\
-        Country, last 3 IMOs     & 4.97 & 0.60 \\
-        Linear regression        & \textbf{4.36} {\scriptsize[4.23, 4.49]} & \textbf{0.70} \\
-        \bottomrule
-      \end{tabular}
-
     \column{0.55\textwidth}
-      \centering
-      \textbf{Award (5 classes)}
+      \footnotesize
+      \textbf{Two prediction tasks} for each contestant at an IMO:
+      \begin{itemize}\setlength{\itemsep}{1pt}
+        \item the \textbf{total score}, 0--42 (regression)
+        \item the \textbf{award}: none, HM, bronze, silver, gold (classification)
+      \end{itemize}
 
-      \vspace{3pt}
-      \setlength{\tabcolsep}{4pt}
-      \begin{tabular}{lccc}
+      \vspace{4pt}
+      \textbf{Models}, from no information to all 20 compact features:
+
+      \vspace{2pt}
+      \scriptsize
+      \setlength{\tabcolsep}{3pt}
+      \begin{tabular}{L{2.6cm}L{5.0cm}}
         \toprule
-        \textbf{Model} & \textbf{Accuracy} & \textbf{$\pm$1 award} & \textbf{Macro-F1} \\
+        \textbf{What the model knows} & \textbf{Predicts for every contestant\,\dots} \\
         \midrule
-        Majority class          & 0.25 & 0.74 & 0.08 \\
-        Country's modal award   & 0.47 & 0.91 & 0.46 \\
-        Logistic regression     & \textbf{0.52} & \textbf{0.91} & \textbf{0.51} \\
+        Nothing {\color{gray}(training mean / majority class)} & the average score (15.1) / the most
+                                          frequent award (HM): the floor to beat \\[2pt]
+        Only the country {\color{gray}(country history)} & their country's mean IMO score / most
+                                          frequent award over the previous 3 IMOs \\[2pt]
+        Country + own history {\color{gray}(linear / logistic regression)} & a weighted combination of earlier IMOs,
+                                          other olympiads, team and country features \\
         \bottomrule
       \end{tabular}
-  \end{columns}
 
-  \vspace{10pt}
-  \begin{itemize}\setlength{\itemsep}{3pt}
-    \item The \textbf{country} alone gives $R^2 = 0.60$; individual history adds
-          \textbf{+0.10} (top coefficients: country mean, IMO attempt, rank in team)
-    \item Exact medal for 52\% (macro-F1 0.51 [0.49, 0.53]), at most one step off
-          for 91\%; silver is the hardest class
-    \item Contestants \textbf{without} history are predicted better (MAE 4.17 vs 4.46):
-          their scores are lower and less spread
+    \column{0.43\textwidth}
+      \begin{block}{Testing on the future}
+        \footnotesize Train on IMO 2008--2022 (8,646 entries), test on
+        \textbf{IMO 2023--2026} (2,523), never shuffled: the model predicts later
+        IMOs from earlier ones, as it would in practice.
+      \end{block}
+
+      \vspace{6pt}
+      \footnotesize
+      \textbf{Metrics}
+      \begin{itemize}\setlength{\itemsep}{2pt}
+        \item Score: MAE (points), $R^2$
+        \item Award: accuracy, accuracy within one award, \textbf{macro-F1}
+              (gold is only 8\% of contestants)
+        \item 95\% bootstrap intervals over test contestants
+      \end{itemize}
+  \end{columns}
+\end{frame}
+
+% ── SLIDE 9: Baselines - results ───────────────────────────────────────────────
+\begin{frame}{Baseline Models: Results on IMO 2023--2026}
+  \scriptsize
+  \setlength{\tabcolsep}{5pt}
+  \renewcommand{\arraystretch}{1.1}
+  \textbf{\footnotesize Predicting the score (0--42)}
+
+  \vspace{2pt}
+  \begin{tabular}{L{3.6cm}L{4.4cm}cc}
+    \toprule
+    \textbf{What the model knows} & \textbf{What it predicts} & \textbf{MAE (points)} & \textbf{$R^2$} \\
+    \midrule
+    Nothing                         & 15 points for everyone                   & 8.4 & $\approx 0$ \\
+    Only the country                & country's mean, last 3 IMOs             & 5.0 & 0.60 \\
+    \textbf{Country + own history}  & regression on 20 features                & \textbf{4.4} & \textbf{0.70} \\
+    \bottomrule
+  \end{tabular}
+
+  \vspace{8pt}
+  \textbf{\footnotesize Predicting the award (none, HM, bronze, silver, gold)}
+
+  \vspace{2pt}
+  \begin{tabular}{L{3.6cm}L{4.0cm}ccc}
+    \toprule
+    \textbf{What the model knows} & \textbf{What it predicts} & \textbf{Accuracy} & \textbf{Within one award} & \textbf{Macro-F1} \\
+    \midrule
+    Nothing                         & HM for everyone                     & 25\% & 74\% & 0.08 \\
+    Only the country                & country's usual award               & 47\% & 91\% & 0.46 \\
+    \textbf{Country + own history}  & regression on 20 features           & \textbf{52\%} & \textbf{91\%} & \textbf{0.51} \\
+    \bottomrule
+  \end{tabular}
+
+  \vspace{8pt}
+  \footnotesize
+  \begin{itemize}\setlength{\itemsep}{2pt}
+    \item \textbf{The country explains most}; own history cuts the error from 5.0 to 4.4 points
+    \item \textbf{Middle awards are hardest}: gold right 75\% of the time, silver only 33\%
+    \item \textbf{History helps most where it exists}: compared with the country alone, the error
+          drops by 0.67 points for contestants with earlier results, 0.49 for first-timers
   \end{itemize}
 \end{frame}
 
-% ── SLIDE 9: Intended analyses ────────────────────────────────────────────────
+% ── SLIDE 10: Intended analyses ───────────────────────────────────────────────
 \begin{frame}{Intended Analyses (Phase 2)}
+  \scriptsize
+  \setlength{\tabcolsep}{4pt}
+  \renewcommand{\arraystretch}{1.15}
+  \begin{tabular}{L{3.3cm}L{5.4cm}L{4.6cm}}
+    \toprule
+    \textbf{Question} & \textbf{What we will do} & \textbf{What we learn} \\
+    \midrule
+    \textbf{RQ1}: How well can IMO results be predicted?
+      & Tree models (random forest, gradient boosting) on all 97 features; they handle
+        missing history and interactions. An ordinal model for the award (none $<$ HM
+        $<$ \dots\ $<$ gold)
+      & How far beyond the baselines (MAE 4.4, $R^2$ 0.70) individual history goes \\[4pt]
+    \textbf{RQ2}: Which earlier competitions matter most?
+      & SHAP values: each feature's contribution to each prediction, summed per
+        competition. Then retrain without one competition at a time
+      & A ranking of JBMO, BMO, EGMO, RMM, APMO, \dots\ by the information they add \\[4pt]
+    \textbf{RQ3}: For whom do predictions fail?
+      & Prediction errors by continent, access to regional olympiads, prior history,
+        missing data, gender proxy; read the largest over- and under-predictions
+      & Whether errors are systematic, e.g.\ larger for countries without
+        regional olympiads \\
+    \bottomrule
+  \end{tabular}
+
+  \vspace{2pt}
   \begin{columns}[T]
     \column{0.62\textwidth}
-      \footnotesize
-      \setlength{\tabcolsep}{4pt}
-      \begin{tabular}{L{1.0cm}L{6.8cm}}
-        \toprule
-        & \textbf{Planned analysis} \\
-        \midrule
-        \textbf{RQ1} & Random forest, gradient boosting (LightGBM) on all 97 features;
-                       an ordinal model for the award; same temporal split and
-                       bootstrap intervals \\[3pt]
-        \textbf{RQ2} & SHAP values aggregated per feature block (\texttt{jbmo\_},
-                       \texttt{bmo\_}, \dots); ablation removing one competition
-                       at a time \\[3pt]
-        \textbf{RQ3} & Residuals by continent, regional access, prior history,
-                       \texttt{status = no\_data}, gender proxy; the largest over-
-                       and under-predictions \\
-        \bottomrule
-      \end{tabular}
-
-    \column{0.36\textwidth}
       \begin{block}{Also planned}
-        \footnotesize
-        \begin{itemize}\setlength{\itemsep}{3pt}
-          \item Predicting $z$-scores, which remove year-to-year difficulty
-          \item Per-problem targets: is the hard P3 / P6 predictable?
-          \item Repeat contestants: how much does one IMO predict the next?
+        \scriptsize
+        \begin{itemize}\setlength{\itemsep}{1pt}
+          \item Predict $z$-scores, which remove differences in difficulty between years
+          \item Per-problem targets: is the hardest problem (P3 / P6) predictable?
           \item Report (max.\ 10 pages) and final presentation
         \end{itemize}
       \end{block}
+    \column{0.36\textwidth}
+      \vspace{14pt}
+      \centering\scriptsize Code and data:\\
+      \texttt{github.com/AnaBogdan05/\\imo-results-predictor}
   \end{columns}
-
-  \vspace{30pt}
-  \centering\footnotesize Code and data: \texttt{github.com/AnaBogdan05/imo-results-predictor}
 \end{frame}
 
 % ── Thanks ───────────────────────────────────────────────────────────────────
