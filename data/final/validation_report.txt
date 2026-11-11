@@ -1,0 +1,23 @@
+Dataset validation
+
+[PASS] one row per contestant per edition  (0 duplicates)
+[PASS] 0 <= total <= maximum  (0 rows outside)
+[PASS] problem scores add up to the total  (3 of 35543 rows differ (pamo-2013, apmo-2018, apmo-2026))
+[PASS] participant counts match competitions.csv
+[PASS] no participation without a country
+[PASS] no contestant career longer than 7 years  (0 contestants)
+[PASS] no percentile on partially published editions  (228 rows in 3 editions)
+[PASS] contestants.csv matches participations
+[PASS] countries.csv covers every country with a continent
+[PASS] final table has every IMO participation  (11169 vs 11169)
+[PASS] one row per contestant per IMO
+[PASS] compact table = same rows, subset of columns
+[PASS] every column is in docs/data_dictionary.md
+[PASS] prior event counts (no future events)  (0 rows differ)
+[PASS] no same-year MEMO/PAMO/EMO/IMO in history  (0 events)
+[PASS] no history -> NaN scores, not 0
+[PASS] imo_attempt = earlier IMOs + 1
+[PASS] <competition>_status consistent with counts and coverage
+[PASS] target_z centred in every year  (max |mean| 0.000)
+[PASS] country features match a direct recomputation  (max |diff| mean 9.7e-17, medal 8.3e-17, modal mismatches 0)
+[PASS] targets equal the raw IMO results

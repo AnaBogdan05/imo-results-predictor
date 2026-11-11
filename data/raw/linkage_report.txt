@@ -1,0 +1,54 @@
+imo-official.org rows (IMO 2000-2026): 15056
+  linked to moresults by contestant id:          15049
+  linked by year + total (ids differ):           2
+  not linked (kept, no cross-competition history): 5
+  total score disagreements (id-linked rows):    0
+  award disagreements (id-linked rows):          0
+  official ids at more than one IMO:             3702
+    of which split over several moresults people: 0
+  moresults people joining several official ids:  87
+  rows without a flag assigned to the neutral team: 24 (Russia, 2022-2025)
+  rows without any country:                      0
+
+Profiles covering more than 7 years, split at gaps over 3 years: 8
+
+Person profiles split on moresults.org (same name up to order/accents, same country):
+  groups merged:                                 585
+  profiles merged into another:                  600
+  participations whose person changed:          1104
+  groups left unmerged (two people in one edition): 1
+  groups left unmerged (events > 7 years apart): 0
+
+JBMO editions added from the organisers' results (missing on moresults.org):
+  jbmo-2018: 79 rows (medallists only; hms.gr)
+  jbmo-2019: 68 rows (medallists only, no scores; cms.org.cy (PDF))
+  jbmo-2020: 108 rows (full; hms.gr (PDF))
+  jbmo-2022: 81 rows (medallists and honourable mentions; jbmo2022.pmf.unsa.ba (PDF))
+  linked to an existing person:                  232 of 336
+
+Coverage (missing editions within each competition's range, after adding PDFs):
+  APMO  2016-2026  missing: none
+  BMO   2005-2026  missing: [2006, 2007, 2012, 2013]
+  EGMO  2012-2026  missing: none
+  EMO   2026-2026  missing: none
+  IMO   1959-2026  missing: none
+  JBMO  2010-2026  missing: [2011, 2017]
+  MEMO  2007-2026  missing: none
+  PAMO  2007-2026  missing: [2008, 2009, 2010, 2011, 2014, 2015, 2020]
+  RMM   2008-2026  missing: [2014, 2022]
+  APMO publishes only the top 10 contestants per country; APMO percentiles are relative to them
+
+participations.csv: 36564 rows, 21105 contestants
+competitions.csv:   178 editions
+contestants.csv:    21105 contestants
+countries.csv:      157 countries
+source
+APMO     3815
+BMO      2005
+EGMO     2625
+EMO       124
+IMO     22745
+JBMO     1601
+MEMO     1194
+PAMO      964
+RMM      1491

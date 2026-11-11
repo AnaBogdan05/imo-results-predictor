@@ -1,0 +1,20 @@
+# Downloaded pages and source files contain contestant names: never publish.
+data/cache/
+
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+
+# Official result documents list contestants by name: keep locally, cite in data/sources/README.md.
+data/sources/**/*.pdf
+
+# LaTeX build files (the compiled deck is copied to docs/phase1_presentation.pdf)
+docs/phase1_presentation/*.aux
+docs/phase1_presentation/*.log
+docs/phase1_presentation/*.nav
+docs/phase1_presentation/*.out
+docs/phase1_presentation/*.snm
+docs/phase1_presentation/*.toc
+docs/phase1_presentation/*.vrb
+docs/phase1_presentation/*.pdf

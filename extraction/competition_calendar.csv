@@ -1,0 +1,10 @@
+source,typical_month,same_year_before_imo,first_held,note
+RMM,2,true,2008,late February / early March
+APMO,3,true,1989,written in March in each participating country
+EGMO,4,true,2012,April
+BMO,5,true,1984,late April / May
+JBMO,6,true,1997,"late June (2018: 19-24 June; 2020: 9-13 September online, before IMO 2020 on 19-28 September); always before the IMO of the same year"
+IMO,7,false,1959,July (2020: September online); the target event
+MEMO,8,false,2007,late August / September; after the IMO
+PAMO,4,false,1991,dates vary by year; same-year editions excluded until verified; first year approximate (only matters before 2002)
+EMO,0,false,2026,first edition 2026; same-year edition excluded until verified

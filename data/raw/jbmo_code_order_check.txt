@@ -1,0 +1,6 @@
+JBMO contestant codes vs order on the hms.gr team pages
+Spearman correlation between the JBMO total and the best later IMO percentile,
+real mapping vs names shuffled within each team (2000 permutations).
+
+JBMO 2018: 39 contestants found at a later IMO; real 0.592; shuffled mean 0.462, 95th percentile 0.622; p = 0.092
+JBMO 2020: 46 contestants found at a later IMO; real 0.514; shuffled mean 0.344, 95th percentile 0.492; p = 0.026
